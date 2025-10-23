@@ -43,6 +43,11 @@
 			<optional>true</optional>
 		</dependency>
 		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
 			<scope>provided</scope>
@@ -56,57 +61,80 @@
 
 	<build>
 		<plugins>
+		<!-- 기존 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<excludes>
+						<exclude>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+						</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
+			<!-- 기존 -->
+			<!-- gpt보고 추가한 vue3 -->
 			<plugin>
-   <groupId>com.github.eirslett</groupId>
-   <artifactId>frontend-maven-plugin</artifactId>
-   <version>1.6</version>
-   <configuration>
-      <workingDirectory>${project.basedir}/src/main/front</workingDirectory>
-      <nodeVersion>v22.20.0</nodeVersion>
-      <npmVersion>11.6.2</npmVersion>
-      <!--https://nodejs.org/dist/
-      http://registry.npmjs.org/npm/-/-->
-   </configuration>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>1.15.0</version>
 
-   <executions>
-      <!-- Install our node and npm version to run npm/node scripts-->
-      <execution>
-         <id>install node and npm</id>
-         <goals>
-            <goal>install-node-and-npm</goal>
-         </goals>
-      </execution>
+            <configuration>
+                <workingDirectory>frontend</workingDirectory>
+            </configuration>
 
-      <!-- Install all project dependencies -->
-      <execution>
-         <id>npm install</id>
-         <goals>
-            <goal>npm</goal>
-         </goals>
-         <!-- optional: default phase is "generate-resources" -->
-         <phase>generate-resources</phase>
-         <!-- Optional configuration which provides for running any npm command -->
-         <configuration>
-            <arguments>install</arguments>
-         </configuration>
-      </execution>
+            <executions>
+                <!-- Node.js 설치 -->
+                <execution>
+                    <id>install node and npm</id>
+                    <goals>
+                        <goal>install-node-and-npm</goal>
+                    </goals>
+                    <configuration>
+                        <nodeVersion>v22.20.0</nodeVersion>
+                        <npmVersion>11.6.2</npmVersion>
+                    </configuration>
+                </execution>
 
-      <!-- Build and minify static files -->
-      <execution>
-         <id>npm run build</id>
-         <goals>
-            <goal>npm</goal>
-         </goals>
-         <configuration>
-            <arguments>run build</arguments>
-         </configuration>
-      </execution>
-   </executions>
-</plugin>
+                <!-- npm install -->
+                <execution>
+                    <id>npm install</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <configuration>
+                        <arguments>install</arguments>
+                    </configuration>
+                </execution>
+
+                <!-- npm run build -->
+                <execution>
+                    <id>npm run build</id>
+                    <goals>
+                        <goal>npm</goal>
+                    </goals>
+                    <phase>package</phase>
+                    <configuration>
+                        <arguments>run build</arguments>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+        <!-- gpt보고 추가한 vue3 끝-->
 		</plugins>
 	</build>
 
